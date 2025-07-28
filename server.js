@@ -15,7 +15,6 @@ app.use(express.json());
 // Database Connection
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
 }).then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
@@ -23,6 +22,11 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/movies', require('./routes/movieRoutes'));
+
+app.use((err, req, res, next) => {
+  console.error('🔥 Unhandled Error:', err.stack);
+  res.status(500).json({ error: 'Internal Server Error', message: err.message });
+});
 
 // Start Server
 const PORT = process.env.PORT || 5000;

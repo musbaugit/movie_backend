@@ -53,10 +53,21 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/debug/users', async (req, res) => {
-  const users = await User.find({});
-  res.json(users);
+// router.get('/debug/users', async (req, res) => {
+//   const users = await User.find({});
+//   res.json(users);
+// });
+
+  router.get('/api/auth/debug/users', async (req, res) => {
+  try {
+      const users = await User.find();
+      res.json(users);
+  } catch (err) {
+      console.error('❌ Error in /api/auth/debug/users:', err.message);
+      res.status(500).json({ error: 'Server error', details: err.message });
+  }
 });
+
 
 
 module.exports = router;
